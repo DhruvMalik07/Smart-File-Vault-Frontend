@@ -22,6 +22,13 @@ const FileUpload = ({ onFileChange }) => {
       return;
     }
 
+    // Check if user is logged in
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setError('Please login to upload files.');
+      return;
+    }
+
     setUploading(true);
     setError('');
     setSuccess('');
@@ -34,6 +41,7 @@ const FileUpload = ({ onFileChange }) => {
       const response = await api.post('/files/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`
         },
         onUploadProgress: (progressEvent) => {
           const percentCompleted = Math.round(
@@ -48,7 +56,14 @@ const FileUpload = ({ onFileChange }) => {
         onFileChange();
       }
     } catch (err) {
-      setError(err.response?.data?.msg || 'An error occurred during upload.');
+      console.error('Upload error:', err);
+      if (err.response?.status === 401) {
+        setError('Session expired. Please login again.');
+        // Optionally redirect to login
+        // window.location.href = '/login';
+      } else {
+        setError(err.response?.data?.msg || 'An error occurred during upload.');
+      }
     } finally {
       setUploading(false);
     }
