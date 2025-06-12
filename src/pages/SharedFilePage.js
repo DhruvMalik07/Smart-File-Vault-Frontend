@@ -21,19 +21,33 @@ const SharedFilePage = () => {
     const downloadFile = async () => {
       try {
         setLoading(true);
-        const response = await api.get(`/files/download/shared/${token}`, {
-          responseType: 'blob',
+        console.log('Attempting to download file with token:', token);
+        
+        // Create a new axios instance for this request to avoid interceptors
+        const response = await fetch(`${process.env.REACT_APP_API_URL || 'https://smart-file-vault-backend.onrender.com/api'}/files/download/shared/${token}`, {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+          },
         });
 
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.msg || 'Failed to download file');
+        }
+
         // Get filename from Content-Disposition header
-        const contentDisposition = response.headers['content-disposition'];
+        const contentDisposition = response.headers.get('content-disposition');
         const filenameMatch = contentDisposition && contentDisposition.match(/filename="(.+)"/);
         const filename = filenameMatch ? filenameMatch[1] : 'downloaded-file';
 
         setFileName(filename);
 
+        // Get the blob from the response
+        const blob = await response.blob();
+        
         // Create a download link
-        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
         link.setAttribute('download', filename);
@@ -45,12 +59,17 @@ const SharedFilePage = () => {
         setLoading(false);
       } catch (err) {
         console.error('Download error:', err);
-        setError(err.response?.data?.msg || 'Error downloading file');
+        setError(err.message || 'Error downloading file');
         setLoading(false);
       }
     };
 
-    downloadFile();
+    if (token) {
+      downloadFile();
+    } else {
+      setError('No share token provided');
+      setLoading(false);
+    }
   }, [token]);
 
   if (loading) {
