@@ -1,70 +1,67 @@
-# Getting Started with Create React App
+# Smart File Vault - Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is the React-based frontend for the Smart File Vault application. It provides the user interface for authentication, file management, and interaction with the secure backend.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🚀 Getting Started
 
-### `npm start`
+To run the frontend locally, follow these steps:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+1.  **Navigate to the frontend directory:**
+    ```bash
+    cd frontend
+    ```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
 
-### `npm test`
+3.  **Run the development server:**
+    ```bash
+    npm start
+    ```
+    The application will be available at `http://localhost:3000`.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+**Note:** The backend server must be running for the frontend to function correctly. The frontend uses a proxy to forward API requests to the backend at `http://localhost:5000`.
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 📦 Key Dependencies
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+-   **`react`**: A JavaScript library for building user interfaces.
+-   **`react-router-dom`**: For handling routing and navigation within the single-page application.
+-   **`axios`**: A promise-based HTTP client for making requests to the backend API.
+-   **`@mui/material`**: A popular React UI framework that provides a suite of customizable components for a modern and responsive design.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+## 🏛️ Project Structure
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+The `src` directory is organized as follows:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+-   **/components**: Contains reusable React components that are used across different pages (e.g., `FileUpload`, `FileList`).
+-   **/pages**: Contains top-level components that represent the main pages of the application (e.g., `LoginPage`, `DashboardPage`).
+-   **/services**: Contains modules for handling external services, primarily the `api.js` file for `axios` configuration.
+-   **`App.js`**: The main application component that sets up routing.
+-   **`index.js`**: The entry point of the React application.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+---
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## ✨ Core Features
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+-   **User Authentication**:
+    -   Separate pages for user **Sign Up** and **Login**.
+    -   Handles JWT (JSON Web Token) based authentication. The token is stored in `localStorage` upon successful login.
+    -   An `axios` interceptor automatically attaches the auth token to the header of every protected API request.
+-   **Protected Routes**: The main dashboard is a protected route. Unauthenticated users are automatically redirected to the login page.
+-   **Dashboard**:
+    -   The central hub for authenticated users.
+    -   Displays a list of all user-uploaded files.
+-   **File Operations**:
+    -   **Upload**: Users can select and upload files, which are sent securely to the backend. An upload progress bar provides real-time feedback.
+    -   **Download**: Users can download their files with a single click.
+    -   **Share**: Generate a 24-hour expiring shareable link for any file. The link is displayed in a modal for easy copying.
+    -   **Delete**: Users can delete their files after a confirmation prompt to prevent accidental data loss.
+-   **Responsive UI**: The interface is built with Material-UI to be responsive and user-friendly across different devices.
